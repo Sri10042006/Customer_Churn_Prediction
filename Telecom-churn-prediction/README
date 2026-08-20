@@ -1,0 +1,50 @@
+# Telecom Churn Prediction
+
+Exploratory data analysis of a telecom customer churn dataset, as a first step toward building a churn-prediction model.
+
+## About the Project
+
+This project investigates a telecom company's customer dataset to understand the factors associated with customer churn. Before any machine learning is applied, the notebook focuses on inspecting and understanding the data using Pandas — checking its structure, data types, missing values, and basic statistics.
+
+## Dataset
+
+- **File:** `customer_churn_dataset-training-master.csv`
+- **Rows:** 440,833
+- **Columns:** 12
+
+| Column | Description |
+|---|---|
+| CustomerID | Unique identifier for each customer |
+| Age | 
+| Gender | 
+| Tenure | Length of time the customer has been with the company |
+| Usage Frequency | How often the customer uses the service |
+| Support Calls | Number of times the customer contacted support |
+| Payment Delay | Number of days the customer's payment was delayed |
+| Subscription Type | Plan tier (Basic, Standard, Premium) |
+| Contract Length | Contract term (Monthly, Quarterly, Annual) |
+| Total Spend | Total amount the customer has spent |
+| Last Interaction | Days since the customer's last interaction |
+| Churn | Target variable — 1 = churned, 0 = retained |
+
+## Notebook
+
+- **File:** `Telecom_Churn_Prediction.ipynb`(WHICH DOWANLOADED FROM KAGGLE)
+
+The notebook covers:
+- Loading the dataset with Pandas
+- Viewing records (`head`, `shape`, `columns`)
+- Checking data types (`dtypes`)
+- Identifying numerical vs categorical columns
+- Checking and handling missing values
+- Generating summary statistics (`info`, `describe`)
+- Written observations on dataset structure, target variable, and key statistics
+
+## Key Findings
+
+- The dataset has **440,833 records and 12 features**.
+- The target variable is **Churn** (binary classification: churned vs retained).
+- **8 numerical features** (Age, Tenure, Usage Frequency, Support Calls, Payment Delay, Total Spend, Last Interaction, plus CustomerID as an identifier) and **3 categorical features** (Gender, Subscription Type, Contract Length).
+- Only one fully empty row was found in the entire dataset — otherwise the data is clean.
+- Churn rate is roughly 57%, making the classes reasonably balanced.
+model
