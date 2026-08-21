@@ -1,3 +1,4 @@
+#Day2
 # Telecom Churn Prediction
 
 Exploratory data analysis of a telecom customer churn dataset, as a first step toward building a churn-prediction model.
@@ -48,3 +49,51 @@ The notebook covers:
 - Only one fully empty row was found in the entire dataset — otherwise the data is clean.
 - Churn rate is roughly 57%, making the classes reasonably balanced.
 model
+
+#Day3
+## Data Cleaning — Session 2
+
+**Pipeline:** Load → Inspect → Missing Values → Duplicates → Data Types → Numerical/Categorical → Identify Problems → Clean → Verify → Save
+
+### 1. Load
+Re-loaded the dataset with `pd.read_csv()` into `df`.
+
+### 2. Inspect
+Re-checked `df.isnull()` and `df.isnull().sum()` to confirm the earlier finding: every column still has exactly **1 missing value** (the same blank row from before, at index 199295).
+
+### 3. Missing Values — Categorical Columns
+Checked the unique values in each categorical column:
+- `Gender`: `['Female', 'Male', NaN]`
+- `Subscription Type`: `['Standard', 'Basic', 'Premium', NaN]`
+- `Contract Length`: `['Annual', 'Monthly', 'Quarterly', NaN]`
+
+Each has exactly one `NaN`, matching the empty row found earlier — confirming there's no separate/hidden missing-value problem elsewhere.
+
+Attempted to fill missing categorical values with the column mode:
+```python
+for col in categorical_columns:
+    df[col] = df[col].fillna(df[col].mode())
+```
+
+### 4. Duplicates
+Checked for duplicate rows with `df.duplicated()` and `df.duplicated().sum()`.
+
+**Result: 0 duplicate rows.** `drop_duplicates().shape[0]` confirms all 440,833 rows are unique — no duplicate-removal needed.
+
+### 5. Data Types & Cleanup
+Stripped leading/trailing whitespace from categorical (object-type) columns using `.str.strip()`, and re-checked `df.info()` to confirm dtypes.
+
+Attempted to convert `CustomerID` to integer with `df["CustomerID"].astype(int)`.
+
+### 6. Identify Problems (found during verification)
+
+Two issues surfaced while re-running `isnull().sum()` and the `astype(int)` conversion:
+
+1. **The mode-based fillna did not actually fill anything.** `df[col].fillna(df[col].mode())` fills by matching index between the Series and the mode result — but `.mode()` returns its own 0-indexed Series, which doesn't align with the original row index (199295). So the NaN in each categorical column is still present after this step. The fix is to fill with a scalar instead, e.g. `df[col].fillna(df[col].mode()[0])` or `df[col].fillna(df[col].mode().iloc[0])`.
+2. **`CustomerID.astype(int)` fails** with a "Cannot convert non-finite values (NA or inf) to integer" error, because `CustomerID` still has 1 `NaN` (the same blank row) that was never dropped or filled with a valid number.
+
+### 7. Next Steps (Clean / Verify / Save)
+- Fix the mode-fill so it uses a scalar (`.mode().iloc[0]`) instead of a Series.
+- Either fill or drop the single blank row (row 199295) before converting `CustomerID` to `int` — or use pandas' nullable `Int64` dtype, which supports `NaN`.
+- Re-run `df.isnull().sum()` to verify zero missing values before saving.
+- Save the cleaned dataset with `df.to_csv("customer_churn_cleaned.csv", index=False)`.
