@@ -173,3 +173,76 @@ Annual and Quarterly contracts are each roughly twice as common as Monthly contr
 ### Next Stage: Exploratory Data Analysis (EDA)
 
 Now moving into deeper EDA — target variable analysis (done above), numerical feature distributions (done above), categorical feature distributions (done above), and next: **feature vs. Churn relationships** and **correlation analysis**, before any model training begins.
+
+Day 5
+
+### 1. Histograms — Numerical Features
+
+Plotted `Usage Frequency`, `Payment Delay`, `Total Spend`, and `Last Interaction` as histograms with KDE overlays.
+
+- All four features are bounded within a fixed, sensible range (e.g. Usage Frequency: 1–30, Total Spend: 100–1000) and their spread looks fairly even rather than sharply peaked — none show the classic long-tail shape of a skewed distribution.
+- No single feature shows a big spike or gap that would suggest data entry errors or a dominant cluster of values.
+
+### 2. Box Plots — Numerical Features
+
+Plotted box plots for the same four numerical features.
+
+- **No outliers detected** using the standard IQR rule (1.5×IQR beyond Q1/Q3) for any of the four features — every value falls within the whisker range.
+- This matches the histograms: the data looks synthetic/clean rather than real-world noisy data, which is common in dataset-practice files like this one.
+
+### 3. Bar Charts — Categorical Features
+
+Plotted bar charts for `Subscription Type`, `Contract Length`, and `Churn`.
+
+- **Subscription Type** is nearly evenly split: Standard (149,128), Premium (148,678), Basic (143,026) — no single tier dominates.
+- **Contract Length**: Annual (177,198) and Quarterly (176,530) are roughly equal and each about double the size of Monthly (87,104).
+- **Churn**: 249,999 churned vs. 190,833 retained — confirms the earlier finding of a mild imbalance (~57% / 43%), not severe enough to require resampling but worth watching during model evaluation.
+
+### 4. Scatter Plots — Numerical Relationships
+
+Checked pairwise correlation for three feature pairs:
+
+| Pair | Correlation |
+|---|---|
+| Usage Frequency ↔ Payment Delay | -0.014 |
+| Total Spend ↔ Usage Frequency | 0.019 |
+| Total Spend ↔ Payment Delay | -0.121 |
+
+- All three pairs show **essentially no linear relationship** — the strongest of the three (Total Spend vs. Payment Delay) is still a weak negative correlation. Scatter plots for these pairs should look like a formless cloud of points rather than a clear trend line.
+- This suggests the numerical features are largely independent of each other, which is good for modeling (less multicollinearity to worry about later).
+
+### 5. Feature vs. Churn — the important part
+
+**Numerical features vs. Churn** (mean value by class):
+
+| Feature | Churn = 0 (stayed) | Churn = 1 (churned) |
+|---|---|---|
+| Usage Frequency | 16.26 | 15.46 |
+| Payment Delay | 10.02 | 15.22 |
+| Total Spend | 749.95 | 541.29 |
+| Last Interaction | 13.01 | 15.60 |
+
+- **Payment Delay** shows the clearest gap — churned customers have noticeably longer payment delays on average (~15.2 vs ~10.0 days). This looks like a genuinely useful predictive signal.
+- **Total Spend** also differs meaningfully — churned customers spend less on average (~541 vs ~750), consistent with the intuition that lower-engagement/lower-value customers churn more.
+- Usage Frequency and Last Interaction show smaller gaps between the two groups, so they may be weaker predictors on their own.
+
+**Categorical features vs. Churn** (churn rate %):
+
+| Gender | Churn Rate |
+|---|---|
+| Female | 66.67% |
+| Male | 49.13% |
+
+| Subscription Type | Churn Rate |
+|---|---|
+| Basic | 58.18% |
+| Standard | 56.07% |
+| Premium | 55.94% |
+
+| Contract Length | Churn Rate |
+|---|---|
+| Annual | 46.08% |
+| Quarterly | 46.03% |
+| **Monthly** | **100.00%** |
+
+- **Contract Length is an extremely strong signal**: every
