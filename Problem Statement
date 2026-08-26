@@ -1,22 +1,31 @@
-Tittle:
-Customer Churn Prediction
+## Telecom Customer Churn Prediction
 
-problem statement:
+**Problem Statement:**
+Predict whether a telecom customer is likely to **churn or stay** using customer usage, payment, subscription, and interaction data.
 
--> If  the Companies lose customers when they stop using their products or services .Then it was leads to financial loss in  their revenue genration. 
--> Identifying customers who are likely to leave before they churn is difficult when there are many customers and multiple factors influencing their decisions.
--> The project aims to use historical customer data to identify patterns associated with churn and predict whether a current customer is likely to leave.
+**Type:**
+Supervised Machine Learning → **Binary Classification**
 
-Objective:
+**Flow:**
+`Data Collection → Data Cleaning → EDA & Statistics → Feature Selection → Train-Test Split → Encoding → Model Training → Model Evaluation → Hyperparameter Tuning → Final Model → Prediction`
 
--> Build and evaluate a machine learning classification model that predicts whether a customer is likely to churn based on their historical and behavioral information.
+**Models Used:**
 
-AI/ML Type:
+* Logistic Regression
+* Random Forest Classifier
 
--> AI/ML Category: Machine Learning
+**Final Model:**
+Tuned **Random Forest Classifier**
 
--> Learning Type: Supervised Learning
+**Input Features:**
+Usage Frequency, Payment Delay, Subscription Type, Contract Length, Total Spend, Last Interaction
 
--> Problem Type: Binary Classification
+**Target:**
+`Churn` → `0 = No Churn`, `1 = Churn`
 
--> Target:Churn
+**Final Output:**
+Predicts whether a customer is **likely to churn or stay**.
+
+**Performance:**
+**79.80% Accuracy | 94% Churn Recall | 81% Churn F1-score**
+
